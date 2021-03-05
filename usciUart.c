@@ -97,7 +97,7 @@ int usciA1UartTxBuffer(char* buffer, int buffLen){
     usciA1UartTxChar('\n');             // move terminal to next line
     return i;
 }
-
+//TEST
 /************************************************************************************
 * Function: usciA1UartTxString
 * - writes a C string of characters, one char at a time to UCA1TXBUF by calling

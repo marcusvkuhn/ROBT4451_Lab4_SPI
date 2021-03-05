@@ -7,12 +7,18 @@
 #include "usciUart.h"
 
 
-#define TRANSMIT_CHAIN_CHAR 1
-#define TRANSMIT_CHAIN_BUFFER 0
+#define TRANSMIT_CHAIN_CHAR 0
+#define TRANSMIT_CHAIN_BUFFER 1
 
 void main(void){
+
+    WDTCTL = WDTPW | WDTHOLD;   // Stop watchdog timer
+
     //----- UART Init
     usciA1UartInit();
+
+//    P4DIR |= BIT1;
+//    P4OUT |= BIT1;
     //----- SPI Init
     usciB1SpiInit(1,1,0x02,0);
 
@@ -22,7 +28,7 @@ void main(void){
 
     if(TRANSMIT_CHAIN_CHAR){
 
-        int i;
+        //int i;
         //---------- enable interrupts
         __enable_interrupt();   // enable global interrupts
         UCB1IE = 0;             // disable SPI interrupts
@@ -32,7 +38,8 @@ void main(void){
         P1DIR |= 0x01;                  // configure P1.0 as output
         do {
             P1OUT ^= 0x01;              // toggle P1.0
-            for(i=10000; i>0; i--);     // delay
+            UCB1TXBUF = 0x4D;
+            __delay_cycles(1048000);     // delay
         } while(1);
     }
 
