@@ -61,7 +61,7 @@ void usciB1SpiPutChar(char txByte) {
         UCB1TXBUF = txByte;  // if TXBUFF ready then transmit a byte by writing to it
 }
 
-int usciB1SpiTxBuffer(char* buffer, int buffLen){
+int usciB1SpiTxBuffer(int* buffer, int buffLen){
     volatile int i = 0;
 
     P6OUT |= SS_B1;     //assert SS
@@ -77,9 +77,11 @@ int usciB1SpiTxBuffer(char* buffer, int buffLen){
 }
 
 //---- atoi on each byte in rxString and store in buffer
-void numStringToInt(char* rxString, char* rxBuffer){
-    while(*rxString++ != NULL_CHAR)
-        *rxBuffer++ = atoi(*rxString++);
+void numStringToInt(char* rxString, int* rxBuffer){
+    volatile int i;
+    for(i = 0; rxString[i] != NULL_CHAR ; i++){
+        rxBuffer[i] = (int)(rxString[i]) - 48;
+    }
 }
 
 

@@ -22,9 +22,10 @@ void main(void){
     //----- SPI Init
     usciB1SpiInit(1,1,0x02,0);
 
-    char rxString[50];
+    char rxString[50] = {};
     int buffLen;
-    char rxBuffer[BUFFER_SZ];
+    //int intBuffer[50];
+    int rxBuffer[BUFFER_SZ] ={};
 
     if(TRANSMIT_CHAIN_CHAR){
 
@@ -53,7 +54,7 @@ void main(void){
 
             usciA1UartGets(rxString);       // wait for a string
             buffLen = strlen(rxString);
-            numStringToInt(rxString, rxBuffer); // atoi on each byte in rxString and store in buffer
+            numStringToInt(rxString,rxBuffer); // atoi on each byte in rxString and store in buffer
             usciB1SpiTxBuffer(rxBuffer, buffLen); // transmit buffer of integers using usciB1SpiPutChar
         } while (1);
     }

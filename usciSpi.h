@@ -21,8 +21,8 @@
 void usciB1SpiInit(unsigned char spiMST, unsigned int sclkDiv, unsigned char sclkMode, unsigned char spiLoopBack);
 void usciB1SpiClkDiv(unsigned int sclkDiv);
 void usciB1SpiPutChar(char txByte);
-int usciB1SpiTxBuffer(char* buffer, int buffLen);
-void numStringToInt(char* rxString, char* rxBuffer);
+int usciB1SpiTxBuffer(int* buffer, int buffLen);
+void numStringToInt(char* rxString, int* rxBuffer);
 
 
 

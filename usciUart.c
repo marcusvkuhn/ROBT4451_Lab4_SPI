@@ -120,7 +120,7 @@ char* usciA1UartGets(char* rxString){
        usciA1UartTxChar(UCA1RXBUF);     // echo it back through TX
     }while((UCA1RXBUF != NL_CHAR) && (i < BUFF_SZ));    // loop while user hasnt pressed enter and buffer isnt full
 
-    rxBuffer[i] = NULL_CHAR;            // insert NULL into string
+    rxBuffer[i-1] = NULL_CHAR;            // insert NULL into string
     strcpy(rxString,rxBuffer);          //
     usciA1UartTxChar('\n');             // move terminal to next line
 
