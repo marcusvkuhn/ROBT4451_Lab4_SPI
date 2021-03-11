@@ -21,7 +21,7 @@ void usciB1SpiInit(unsigned char spiMST, unsigned int sclkDiv, unsigned char scl
     UCB1CTL1 |= UCSWRST;                        // **Put state machine in USCI reset while you intitialize it**
 
 	// configure the control registers using the input arguments. See user manual, lecture notes and programmers model
-	UCB1CTL0 |= (sclkMode << 5)      // set clock mode sclkMode.1 = UCCKPH, sclkMode.0 = UCCKPL
+	UCB1CTL0 |= (sclkMode << 6)      // set clock mode sclkMode.1 = UCCKPH, sclkMode.0 = UCCKPL
 	         + (spiMST << 3)        // 0 = slave, 1 = master
 	         + UCMSB
 	         + UCSYNC;              // Sync == 1, SPI mode
@@ -64,15 +64,14 @@ void usciB1SpiPutChar(char txByte) {
 int usciB1SpiTxBuffer(int* buffer, int buffLen){
     volatile int i = 0;
 
-    P6OUT |= SS_B1;     //assert SS
+    P6OUT &= ~SS_B1;     //assert SS
 
     for(i = 0; (i < buffLen) && (*buffer != NULL_CHAR) ; i++){
-            usciB1SpiPutChar(*buffer++);
+        usciB1SpiPutChar(*buffer++);
     }
+    P6OUT |= SS_B1;       //de-assert SS immediately after the last byte has been transmitted
 
-    P6OUT &= ~SS_B1;       //de-assert SS immediately after the last byte has been transmitted
-
-    usciB1SpiPutChar('\n');             // move terminal to next line
+    //usciB1SpiPutChar('\n');             // move terminal to next line
     return i;
 }
 
