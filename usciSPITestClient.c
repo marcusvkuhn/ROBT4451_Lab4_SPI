@@ -20,7 +20,7 @@ void main(void){
 //    P4DIR |= BIT1;
 //    P4OUT |= BIT1;
     //----- SPI Init
-    usciB1SpiInit(1,1,0x02,0);
+    usciB1SpiInit(1,16,0x02,0);
 
     char rxString[50] = {};
     int buffLen;
@@ -45,13 +45,12 @@ void main(void){
     }
 
     else if(TRANSMIT_CHAIN_BUFFER){
+        __enable_interrupt();   // enable global interrupts
+        UCB1IE = 0;             // disable SPI interrupts
+        UCA1IE &= ~UCRXIE;       // disable UART (A1) RX interrupts
+        UCB1IE |= UCRXIE;
 
         do {
-            //---------- disable interrupts
-            //__enable_interrupt();   // enable global interrupts
-            UCB1IE = 0;             // disable SPI interrupts
-            UCA1IE &= ~UCRXIE;       // enable UART (A1) interrupts
-
             usciA1UartGets(rxString);       // wait for a string
             buffLen = strlen(rxString);
             numStringToInt(rxString,rxBuffer); // atoi on each byte in rxString and store in buffer
